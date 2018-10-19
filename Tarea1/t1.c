@@ -58,3 +58,63 @@ char *reemplazo(char *s, char c, char *pal){
     return res;
 }
 
+void reemplazar(char *s, char c, char *pal){
+    int len_s,len_pal,count_c,len_malloc;
+    char *puntero;
+    len_s = 0;
+    len_pal = 0;
+    count_c = 0;
+    printf("%s\n",s);
+    printf("%s\n",puntero );
+    while(*s){
+        if (c == *s){
+            count_c++;
+        }
+        len_s++;
+        s++;
+    }
+    while(*pal){
+        len_pal++;
+        pal++;
+    }
+    if (len_pal>1){
+        int i,j;
+        puntero = s + count_c*(len_pal-1);
+        for(i = 0;i<len_s;i++){
+            if (c == *s){
+                for(j = 0; j<len_pal; j++){
+                  	pal--;
+                    *puntero = *pal;
+                    puntero--;
+                }
+                pal += len_pal;
+                s--;         
+            }
+            else{
+                *puntero = *s;
+                s--;
+                puntero--;
+            }
+            
+        }
+        *s = *puntero;
+        printf("%s\n", s);
+    }
+    else if(len_pal == 1){
+    	for(i = 0;i<len_s;i++){
+    		if (c == *s){
+            	for(j = 0; j<len_pal; j++){
+                	pal--;
+                	*s = *pal;
+                	s--;
+            	}
+            	pal += len_pal;
+      			s--;
+        	}
+        	else{
+        		s--;
+        	}
+    	}
+    }
+    //
+}
