@@ -90,7 +90,7 @@ int main() {
       fprintf(stderr, "reemplazar(r, 'a', \"opa\") modifico despues de r\n");
       exit(1);
     }
-
+    
     reemplazar(r, 'o', "");
     //       01234567890123
     // r es "hlpa que tpal"

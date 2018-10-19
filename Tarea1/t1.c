@@ -59,13 +59,11 @@ char *reemplazo(char *s, char c, char *pal){
 }
 
 void reemplazar(char *s, char c, char *pal){
-    int len_s,len_pal,count_c,len_malloc;
+    int len_s,len_pal,count_c;
     char *puntero;
     len_s = 0;
     len_pal = 0;
     count_c = 0;
-    printf("%s\n",s);
-    printf("%s\n",puntero );
     while(*s){
         if (c == *s){
             count_c++;
@@ -77,12 +75,12 @@ void reemplazar(char *s, char c, char *pal){
         len_pal++;
         pal++;
     }
+
     if (len_pal>1){
-        int i,j;
         puntero = s + count_c*(len_pal-1);
-        for(i = 0;i<len_s;i++){
+        for(int i = 0;i<len_s;i++){
             if (c == *s){
-                for(j = 0; j<len_pal; j++){
+                for(int j = 0; j<len_pal; j++){
                   	pal--;
                     *puntero = *pal;
                     puntero--;
@@ -98,23 +96,35 @@ void reemplazar(char *s, char c, char *pal){
             
         }
         *s = *puntero;
-        printf("%s\n", s);
     }
     else if(len_pal == 1){
-    	for(i = 0;i<len_s;i++){
+    	s -= len_s;
+    	pal -= len_pal;
+    	for(int i = 0;i<len_s;i++){
     		if (c == *s){
-            	for(j = 0; j<len_pal; j++){
-                	pal--;
-                	*s = *pal;
-                	s--;
-            	}
-            	pal += len_pal;
-      			s--;
+
+                *s = *pal;
+      			s++;
         	}
         	else{
-        		s--;
+        		s++;
         	}
     	}
     }
-    //
+    else if(len_pal == 0){
+    	s -= len_s;
+    	puntero = s;
+    	for(int i = 0; i<len_s; i++){
+    		if (c == *s){
+                s++;      
+            }
+            else{
+                *puntero = *s;
+                s++;
+                puntero++;
+            }
+        }
+        *s = *puntero;
+        *(puntero)='\0';
+    }
 }
