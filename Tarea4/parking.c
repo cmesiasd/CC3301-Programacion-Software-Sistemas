@@ -55,10 +55,10 @@ int ubicar(int k){
         int i = 0;
         for(; i < 5; i++){
             if (i == 1){
-                return -1
+                return -1;
             }
             if (est[i] != 0){
-                return -1
+                return -1;
             }
         }
     }
@@ -94,26 +94,6 @@ void liberar(char* nom){
     pthread_mutex_unlock(&m);
 }
 
-
-void * serv(void* s){
-    int pos;
-    char num;
-    char* nombre = getstr(s);
-    char* accion = getstr(s);
-    if(strcmp(accion,"r")){
-        leer(s,&num,1);
-        pos = reservar(nombre,atoi(num));
-        write(s,&pos,sizeof(int));
-        imprimir();
-    }
-    else{
-        liberar(nombre);
-        imprimir();
-    }
-    close(s);
-    return NULL;
-}
-
 void imprimir(){
     for(int i = 0; i < 5; i++){
         if(est[i] == 0){
@@ -126,8 +106,27 @@ void imprimir(){
     printf("\n");
 }
 
+void * serv(int s){
+    int pos;
+    int numero;
+    char* nombre = getstr(s);
+    char* op = getstr(s);
+    if(strcmp(op,"r")==0){
+        leer(s,&numero,sizeof(numero));
+        pos = reservar(nombre,numero);
+        write(s,&pos,sizeof(pos));
+        imprimir();
+    }
+    else{
+        liberar(nombre);
+        imprimir();
+    }
+    close(s);
+    return NULL;
+}
+
 int main(int argc,char** argv){
-    int s,s2;
+    long s,s2;
     pthread_t pid;
     signal(SIGPIPE,morir);
     s = j_socket();
@@ -149,7 +148,8 @@ int main(int argc,char** argv){
         }
 
         if(pthread_create(&pid, &attr, (Thread_fun) serv,(void*) s2) != 0){
-            fprintf(stderr,"No pude crear thread para nuevo cliente %d \n", s2);
+            fprintf(stderr,"No pude crear thread para nuevo cliente %ld \n", s2);
+            close(s2);
             exit(1);
         }
         pthread_attr_destroy(&attr);
