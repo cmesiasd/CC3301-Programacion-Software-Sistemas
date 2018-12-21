@@ -65,6 +65,7 @@ int main(int argc, char** argv){
         fprintf(stderr,"Falló conexión");
         exit(1);
     }
+
     int pos;
     int num;
     char* nombre=argv[1];
@@ -74,8 +75,8 @@ int main(int argc, char** argv){
     if(argc==4){
         num = atoi(argv[3]);
         write(s,&num,sizeof(num));
-        leer(s,&pos,sizeof(pos));
-        printf("%i\n",pos);
+        read(s,&pos,sizeof(pos));
+        printf("%d\n",pos);
     }
     close(s);
     free(host);

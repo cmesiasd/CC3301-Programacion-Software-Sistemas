@@ -66,14 +66,15 @@ int ubicar(int k){
 }
 
 int reservar(char *nom, int k) {
+    pthread_mutex_lock(&m);
+    int val;
+    while (ubicar(k) == -1) {
+        pthread_cond_wait(&c, &m);
+    }
     int len = strlen(nom);
     char *nombre = malloc(sizeof(char)*len+1);
     strcpy(nombre,nom);
-    pthread_mutex_lock(&m);
-    int val = ubicar(k);
-    while (val == -1) {
-        pthread_cond_wait(&c, &m);
-    }
+    val = ubicar(k);
     for(int i=val;i<val+k;i++){
         nombre_ocupante[i] = nombre;
         est[i] = 1;
@@ -112,7 +113,7 @@ void * serv(int s){
     char* nombre = getstr(s);
     char* op = getstr(s);
     if(strcmp(op,"r")==0){
-        leer(s,&numero,sizeof(numero));
+        read(s,&numero,sizeof(int));
         pos = reservar(nombre,numero);
         write(s,&pos,sizeof(pos));
         imprimir();
